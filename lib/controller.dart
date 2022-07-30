@@ -28,11 +28,5 @@ abstract class _ControllerBase with Store {
     return null;
   }
 
-  String? validateCpf() {
-    if (client.cpf == null || (client.cpf?.isEmpty ?? false)) {
-      return "este campo é obrigatorio";
-    }
-
-    return null;
-  }
+  dispose() {}
 }

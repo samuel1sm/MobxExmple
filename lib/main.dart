@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mobx_flutterando/controller.dart';
+import 'package:provider/provider.dart';
 
 import 'home.dart';
 
@@ -9,10 +11,17 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Mobx',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: const HomePage(),
-    );
+    return MultiProvider(
+        providers: [
+          Provider<Controller>(
+            create: (_) => Controller(),
+            dispose: (_, controller) => controller.dispose(),
+          ),
+        ],
+        child: MaterialApp(
+          title: 'Flutter Mobx',
+          theme: ThemeData(primarySwatch: Colors.blue),
+          home: const HomePage(),
+        ));
   }
 }
