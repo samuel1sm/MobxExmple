@@ -10,13 +10,9 @@ abstract class _ClientBase with Store {
   String? name;
   @observable
   String? email;
-  @observable
-  String? cpf;
 
   @action
   changeName(String newName) => name = newName;
   @action
   changeEmail(String newEmail) => email = newEmail;
-  @action
-  changeCpf(String newCpf) => cpf = newCpf;
 }

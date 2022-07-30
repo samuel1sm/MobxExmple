@@ -39,21 +39,6 @@ mixin _$Client on _ClientBase, Store {
     });
   }
 
-  late final _$cpfAtom = Atom(name: '_ClientBase.cpf', context: context);
-
-  @override
-  String? get cpf {
-    _$cpfAtom.reportRead();
-    return super.cpf;
-  }
-
-  @override
-  set cpf(String? value) {
-    _$cpfAtom.reportWrite(value, super.cpf, () {
-      super.cpf = value;
-    });
-  }
-
   late final _$_ClientBaseActionController =
       ActionController(name: '_ClientBase', context: context);
 
@@ -80,22 +65,10 @@ mixin _$Client on _ClientBase, Store {
   }
 
   @override
-  dynamic changeCpf(String newCpf) {
-    final _$actionInfo = _$_ClientBaseActionController.startAction(
-        name: '_ClientBase.changeCpf');
-    try {
-      return super.changeCpf(newCpf);
-    } finally {
-      _$_ClientBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
 name: ${name},
-email: ${email},
-cpf: ${cpf}
+email: ${email}
     ''';
   }
 }
