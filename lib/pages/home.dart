@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:provider/provider.dart';
-
+import '../models/item_model.dart';
 import 'components/item_widget.dart';
+import 'home_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,6 +12,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final controller = HomeController();
+  var model = ItemModel.defaultValues();
+
   _dialog() {
     showDialog(
         context: context,
@@ -19,7 +22,7 @@ class _HomePageState extends State<HomePage> {
           return AlertDialog(
             title: const Text("Adicionar item"),
             content: TextField(
-              onChanged: (value) {},
+              onChanged: model.setTitle,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Novo Item',
@@ -27,7 +30,10 @@ class _HomePageState extends State<HomePage> {
             ),
             actions: [
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  controller.addItem(model);
+                  Navigator.pop(context);
+                },
                 child: const Text('Savar'),
               ),
               TextButton(
@@ -45,15 +51,30 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const TextField(
-        decoration: InputDecoration(hintText: "Pesquisa ..."),
-      )),
-      body: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (_, index) {
-          return const ItemWidget();
-        },
+        title: const TextField(
+          decoration: InputDecoration(hintText: "Pesquisa ..."),
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Observer(builder: (_) {
+                return Text("${controller.totalChecked}");
+              }))
+        ],
       ),
+      body: Observer(builder: (_) {
+        return ListView.builder(
+          itemCount: controller.listItems.length,
+          itemBuilder: (_, index) {
+            var item = controller.listItems[index];
+            return ItemWidget(
+                item: item,
+                removeClicked: () {
+                  controller.removeItem(item);
+                });
+          },
+        );
+      }),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () {
