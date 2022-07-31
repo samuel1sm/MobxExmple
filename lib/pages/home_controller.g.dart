@@ -9,6 +9,13 @@ part of 'home_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$HomeController on _HomeControllerBase, Store {
+  Computed<List<ItemModel>>? _$filteredListItemsComputed;
+
+  @override
+  List<ItemModel> get filteredListItems => (_$filteredListItemsComputed ??=
+          Computed<List<ItemModel>>(() => super.filteredListItems,
+              name: '_HomeControllerBase.filteredListItems'))
+      .value;
   Computed<int>? _$totalCheckedComputed;
 
   @override
@@ -33,8 +40,35 @@ mixin _$HomeController on _HomeControllerBase, Store {
     });
   }
 
+  late final _$filterAtom =
+      Atom(name: '_HomeControllerBase.filter', context: context);
+
+  @override
+  String get filter {
+    _$filterAtom.reportRead();
+    return super.filter;
+  }
+
+  @override
+  set filter(String value) {
+    _$filterAtom.reportWrite(value, super.filter, () {
+      super.filter = value;
+    });
+  }
+
   late final _$_HomeControllerBaseActionController =
       ActionController(name: '_HomeControllerBase', context: context);
+
+  @override
+  dynamic setFilter(String value) {
+    final _$actionInfo = _$_HomeControllerBaseActionController.startAction(
+        name: '_HomeControllerBase.setFilter');
+    try {
+      return super.setFilter(value);
+    } finally {
+      _$_HomeControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic addItem(ItemModel item) {
@@ -62,6 +96,8 @@ mixin _$HomeController on _HomeControllerBase, Store {
   String toString() {
     return '''
 listItems: ${listItems},
+filter: ${filter},
+filteredListItems: ${filteredListItems},
 totalChecked: ${totalChecked}
     ''';
   }

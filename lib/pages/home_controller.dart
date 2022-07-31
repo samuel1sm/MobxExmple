@@ -13,7 +13,27 @@ abstract class _HomeControllerBase with Store {
   ].asObservable();
 
   @computed
+  List<ItemModel> get filteredListItems {
+    if (filter.isEmpty) {
+      return listItems;
+    }
+
+    return listItems
+        .where(
+          (element) =>
+              element.title!.toLowerCase().contains(filter.toLowerCase()),
+        )
+        .toList();
+  }
+
+  @computed
   int get totalChecked => listItems.length;
+
+  @observable
+  String filter = '';
+
+  @action
+  setFilter(String value) => filter = value;
 
   @action
   addItem(ItemModel item) {
